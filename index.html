@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Entry — Electrical Services</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F6F3;
+  --surface: #FFFFFF;
+  --border: #E2E0D9;
+  --border-strong: #C8C5BC;
+  --text: #1A1916;
+  --text-muted: #6B6860;
+  --text-hint: #9C9A94;
+  --accent: #1B4FD8;
+  --accent-bg: #EEF2FF;
+  --accent-text: #1B3FAA;
+  --warn-bg: #FFF8EC;
+  --warn-border: #F5A623;
+  --warn-text: #7A4F00;
+  --success-bg: #EDFAF3;
+  --success-border: #2ECC71;
+  --success-text: #0D6832;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --radius-pill: 100px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ── Layout ── */
+.app { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.main {
+  padding: 40px 48px;
+  max-width: 820px;
+}
+
+/* ── Sidebar ── */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--text);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-icon svg { color: white; }
+
+.brand-name {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.brand-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.nav-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--text-hint);
+  margin-bottom: 8px;
+}
+
+.steps-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  cursor: default;
+  transition: background .15s;
+}
+
+.step-item.active { background: var(--accent-bg); }
+
+.step-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: all .2s;
+}
+
+.step-item.active .step-num {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.step-item.done .step-num {
+  background: var(--success-bg);
+  border-color: var(--success-border);
+  color: var(--success-text);
+  font-size: 12px;
+}
+
+.step-text {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.step-item.active .step-text { color: var(--accent-text); }
+.step-item.done .step-text { color: var(--text); }
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.history-item {
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  cursor: pointer;
+  transition: border-color .15s;
+}
+
+.history-item:hover { border-color: var(--border-strong); }
+
+.history-code {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.history-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.empty-history {
+  font-size: 12px;
+  color: var(--text-hint);
+  text-align: center;
+  padding: 16px 0;
+}
+
+/* ── Main header ── */
+.page-header { margin-bottom: 32px; }
+
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.page-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ── Sections ── */
+.section { margin-bottom: 24px; }
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.section-badge {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+/* ── Fields ── */
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.field-row.two { grid-template-columns: repeat(2, 1fr); }
+.field-row.one { grid-template-columns: 1fr; }
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+
+.field label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-muted);
+}
+
+.field label .req {
+  color: #E24B4A;
+  margin-left: 2px;
+}
+
+select {
+  font-family: var(--sans);
+  font-size: 13px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  cursor: pointer;
+  transition: border-color .15s, box-shadow .15s;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%239C9A94' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px;
+}
+
+select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(27,79,216,.1); }
+select:disabled { opacity: .45; cursor: not-allowed; }
+
+/* ── Pills ── */
+.pill-group { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.pill {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all .12s;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.pill:hover { border-color: var(--border-strong); color: var(--text); }
+
+.pill.on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.pill.na {
+  opacity: .35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.field-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 16px 0;
+}
+
+.attr-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.attr-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+/* ── Notes ── */
+.note {
+  font-size: 12px;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-muted);
+  margin-top: 10px;
+  border-left: 3px solid var(--border-strong);
+  border-left-width: 3px;
+}
+
+.note.warn {
+  background: var(--warn-bg);
+  border-color: var(--warn-border);
+  color: var(--warn-text);
+  border-left-color: var(--warn-border);
+}
+
+/* ── Output ── */
+.output-card {
+  background: var(--text);
+  border-radius: var(--radius);
+  padding: 24px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.output-card::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.04);
+}
+
+.output-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: rgba(255,255,255,.45);
+  margin-bottom: 8px;
+}
+
+.output-code {
+  font-family: var(--mono);
+  font-size: 36px;
+  font-weight: 500;
+  letter-spacing: .04em;
+  color: white;
+  line-height: 1;
+  margin-bottom: 8px;
+  word-break: break-all;
+}
+
+.output-desc {
+  font-size: 14px;
+  color: rgba(255,255,255,.65);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.output-rates {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.rate-field { display: flex; flex-direction: column; gap: 4px; }
+
+.rate-field label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: rgba(255,255,255,.4);
+}
+
+.rate-field input {
+  font-family: var(--mono);
+  font-size: 14px;
+  padding: 8px 10px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,.08);
+  color: white;
+  outline: none;
+  transition: border-color .15s;
+}
+
+.rate-field input:focus { border-color: rgba(255,255,255,.4); }
+.rate-field input::placeholder { color: rgba(255,255,255,.25); }
+.rate-field input[readonly] { background: rgba(255,255,255,.04); color: rgba(255,255,255,.5); cursor: default; }
+
+.output-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.btn {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: all .15s;
+  letter-spacing: .01em;
+}
+
+.btn-primary {
+  background: white;
+  color: var(--text);
+}
+.btn-primary:hover { background: rgba(255,255,255,.9); }
+
+.btn-ghost {
+  background: rgba(255,255,255,.1);
+  color: rgba(255,255,255,.8);
+  border: 1px solid rgba(255,255,255,.15);
+}
+.btn-ghost:hover { background: rgba(255,255,255,.15); color: white; }
+
+.btn-danger-ghost {
+  background: transparent;
+  color: rgba(255,255,255,.4);
+  border: 1px solid rgba(255,255,255,.1);
+}
+.btn-danger-ghost:hover { color: rgba(255,255,255,.7); border-color: rgba(255,255,255,.2); }
+
+.empty-output {
+  text-align: center;
+  padding: 32px 0;
+  font-size: 13px;
+  color: var(--text-hint);
+}
+
+/* ── Toast ── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--text);
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all .25s cubic-bezier(.34,1.56,.64,1);
+  z-index: 999;
+  pointer-events: none;
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); flex-direction: row; flex-wrap: wrap; padding: 16px; gap: 16px; }
+  .main { padding: 24px 16px; }
+  .field-row { grid-template-columns: 1fr; }
+  .field-row.two { grid-template-columns: 1fr; }
+  .output-rates { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-name">Job Entry</div>
+        <div class="brand-sub">Electrical Services</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="nav-label">Progress</div>
+      <div class="steps-nav">
+        <div class="step-item active" id="nav-1">
+          <div class="step-num">1</div>
+          <div class="step-text">Service type</div>
+        </div>
+        <div class="step-item" id="nav-2">
+          <div class="step-num">2</div>
+          <div class="step-text">Service category</div>
+        </div>
+        <div class="step-item" id="nav-3">
+          <div class="step-num">3</div>
+          <div class="step-text">Service name</div>
+        </div>
+        <div class="step-item" id="nav-4">
+          <div class="step-num">4</div>
+          <div class="step-text">Action</div>
+        </div>
+        <div class="step-item" id="nav-5">
+          <div class="step-num">5</div>
+          <div class="step-text">Attributes</div>
+        </div>
+        <div class="step-item" id="nav-6">
+          <div class="step-num">6</div>
+          <div class="step-text">Location</div>
+        </div>
+        <div class="step-item" id="nav-7">
+          <div class="step-num">7</div>
+          <div class="step-text">Output</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:1;overflow:hidden;display:flex;flex-direction:column;gap:8px">
+      <div class="nav-label">Recent entries</div>
+      <div class="history-list" id="historyList">
+        <div class="empty-history">No entries yet</div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="resetAll()" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);font-size:12px">
+      + New entry
+    </button>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="page-header">
+      <div class="page-title">New job entry</div>
+      <div class="page-sub">Build a standardized job code — no typos, no guessing.</div>
+    </div>
+
+    <!-- Section 1: Classification -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-badge">Section 1</span>
+        <span class="section-title">Service classification</span>
+      </div>
+      <div class="card">
+        <div class="field-row">
+          <div class="field">
+            <label>Service type <span class="req">*</span></label>
+            <select id="svcType" onchange="onL1()">
+              <option value="">— select —</option>
+              <option value="R">Residential</option>
+              <option value="C">Commercial</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Service category <span class="req">*</span></label>
+            <select id="svcCat" onchange="onL2()" disabled>
+              <option value="">—</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Service name <span class="req">*</span></label>
+            <select id="svcName" onchange="onL3()" disabled>
+              <option value="">—</option>
+            </select>
+          </div>
+        </div>
+        <div id="svcNote" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- Section 2: Work Details -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-badge">Section 2</span>
+        <span class="section-title">Work details</span>
+      </div>
+      <div class="card">
+        <div class="field">
+          <label>Action <span class="req">*</span></label>
+          <div class="pill-group" id="actionPills">
+            <span class="pill na">Select a service name first</span>
+          </div>
+        </div>
+
+        <div class="field-divider" id="attrDivider"></div>
+
+        <div id="attrSection" style="display:none">
+          <div class="attr-row" id="attrRows"></div>
+          <div class="field-divider"></div>
+        </div>
+
+        <div class="field">
+          <label>Location <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-hint)">(optional)</span></label>
+          <div class="pill-group" id="locPills">
+            <span class="pill na">Select a service name first</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Output -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-badge">Section 3</span>
+        <span class="section-title">Generated output</span>
+      </div>
+      <div id="outputCard" class="output-card">
+        <div class="empty-output">Complete sections 1 & 2 to generate your job code</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const CATS = {
+  R:[
+    {v:"R-PNL",l:"R – Electrical Panel / Service Upgrade"},
+    {v:"R-EV",l:"R – EV Charging"},
+    {v:"R-HVAC",l:"R – HVAC & Heat Pumps"},
+    {v:"R-PWR",l:"R – Power Backup Systems"},
+    {v:"R-LGT",l:"R – Lighting"},
+    {v:"R-CAM",l:"R – Cameras & Smart Devices"},
+    {v:"R-POOL",l:"R – Pool Equipment"},
+    {v:"R-RNV",l:"R – Renovation"},
+    {v:"R-NEW",l:"R – New Build"},
+    {v:"R-MAT",l:"R – Material Only"},
+    {v:"ESA",l:"ESA Permit"},
+    {v:"R-SVC",l:"R – Service Call"},
+    {v:"R-GEN",l:"R – General Service"},
+  ],
+  C:[
+    {v:"C-PNL",l:"C – Electrical Panel / Service Upgrade"},
+    {v:"C-EV",l:"C – EV Charging"},
+    {v:"C-HVAC",l:"C – HVAC & Heat Pumps"},
+    {v:"C-PWR",l:"C – Power Backup Systems"},
+    {v:"C-LGT",l:"C – Lighting"},
+    {v:"C-CAM",l:"C – Cameras & Smart Devices"},
+    {v:"C-POOL",l:"C – Pool Equipment"},
+    {v:"C-RNV",l:"C – Renovation"},
+    {v:"C-NEW",l:"C – New Build"},
+    {v:"C-MAT",l:"C – Material Only"},
+    {v:"ESA",l:"ESA Permit"},
+    {v:"C-SVC",l:"C – Service Call"},
+    {v:"C-GEN",l:"C – General Service"},
+    {v:"C-FIT",l:"C – Commercial Fit Up"},
+  ]
+};
+
+const DB = {
+  "EV Charger":{cats:["R-EV","C-EV"],code:"EV",actions:["I","RE","T","FX"],
+    attrs:[
+      {key:"amperage",label:"Amperage",options:["50A","60A","80A"],codes:{"50A":"50","60A":"60","80A":"80"}},
+      {key:"brand",label:"Brand",options:["Universal","Tesla"],codes:{"Universal":"","Tesla":"T"}}
+    ],locs:["GARA","EXT","BMT"],note:null},
+
+  "Panel Upgrade":{cats:["R-PNL","C-PNL"],code:"PNL",actions:["RE","U","I","T"],
+    attrs:[
+      {key:"size",label:"Panel size",options:["100A","200A","225A Busbar","400A"],codes:{"100A":"100","200A":"200","225A Busbar":"225","400A":"400"}},
+      {key:"slots",label:"Breaker slots",options:["30/60","40/80","—"],codes:{"30/60":"-3060","40/80":"-4080","—":""}}
+    ],locs:["BMT","GARA","EXT","ROOM"],note:null},
+
+  "Panel Replacement":{cats:["R-PNL","C-PNL"],code:"PNL",actions:["RE","U"],
+    attrs:[
+      {key:"size",label:"Panel size",options:["100A","200A"],codes:{"100A":"100","200A":"200"}}
+    ],locs:["BMT","GARA"],note:null},
+
+  "Full Service Upgrade":{cats:["R-PNL","C-PNL"],code:"SRV",actions:["U"],
+    attrs:[],locs:["BMT","EXT"],note:null},
+
+  "Service Work":{cats:["R-PNL","C-PNL"],code:"SRV",actions:["T","FX","RE"],
+    attrs:[],locs:["BMT","GARA","EXT","ROOM"],note:null},
+
+  "Generator":{cats:["R-PWR","C-PWR"],code:"GEN",actions:["I","RE","T","FX","C"],
+    attrs:[
+      {key:"type",label:"Type",options:["Standby","Portable","Generlink","Transfer Switch"],codes:{"Standby":"SB","Portable":"PORT","Generlink":"GL","Transfer Switch":"TS"}}
+    ],locs:["EXT","GARA"],note:null},
+
+  "Solar":{cats:["R-PWR","C-PWR"],code:"SOLR",actions:["I","U"],
+    attrs:[
+      {key:"size",label:"System size",options:["Under 8 kW","8–10 kW","10+ kW"],codes:{"Under 8 kW":"U8","8–10 kW":"810","10+ kW":"10P"}},
+      {key:"battery",label:"Battery",options:["With battery","No battery"],codes:{"With battery":"+BAT","No battery":""}}
+    ],locs:["ROOF","EXT"],
+    note:"⚠ Subcontractor — FIG/Execon lead workflow required before creating estimate"},
+
+  "Battery Backup":{cats:["R-PWR","C-PWR"],code:"BAT",actions:["I","RE"],
+    attrs:[],locs:["BMT","GARA"],
+    note:"⚠ Subcontractor — FIG/Execon lead workflow required before creating estimate"},
+
+  "Ductless Heat Pump":{cats:["R-HVAC","C-HVAC"],code:"DCT",actions:["I","RE","T","FX"],
+    attrs:[
+      {key:"zones",label:"Zones",options:["Single zone","Multi zone"],codes:{"Single zone":"1Z","Multi zone":"MZ"}}
+    ],locs:["ROOM","GARA","BMT","EXT"],note:null},
+
+  "Central Heat Pump":{cats:["R-HVAC","C-HVAC"],code:"HP",actions:["I","RE","T"],
+    attrs:[],locs:["BMT","GARA","EXT"],note:null},
+
+  "HVAC":{cats:["R-HVAC","C-HVAC"],code:"HVAC",actions:["I","RE","T","FX"],
+    attrs:[
+      {key:"type",label:"Unit type",options:["AC unit","Heat pump","RTU","Furnace"],codes:{"AC unit":"AC","Heat pump":"HP","RTU":"RTU","Furnace":"FRN"}}
+    ],locs:["ROOF","EXT","BMT"],note:null},
+
+  "Lighting":{cats:["R-LGT","C-LGT"],code:"L",actions:["I","RE","FX","A","T"],
+    attrs:[
+      {key:"type",label:"Fixture type",options:["Pot light","Exterior","Ballast","General"],codes:{"Pot light":"PL","Exterior":"EXT","Ballast":"BLS","General":""}}
+    ],locs:["KITC","BATH","LIV","ROOM","EXT","GARA","BARN","ROOF"],note:null},
+
+  "Camera":{cats:["R-CAM","C-CAM"],code:"CAM",actions:["I","RE","T","FX"],
+    attrs:[],locs:["EXT","GARA","ROOM","BARN"],note:null},
+
+  "Door Bell":{cats:["R-CAM","C-CAM"],code:"BEL",actions:["I","RE","FX"],
+    attrs:[],locs:["EXT"],note:null},
+
+  "Smart Device":{cats:["C-CAM"],code:"SMRT",actions:["I","RE","T"],
+    attrs:[],locs:["ROOM","EXT"],note:null},
+
+  "Pool":{cats:["R-POOL"],code:"POOL",actions:["I","T","FX"],
+    attrs:[
+      {key:"type",label:"Equipment type",options:["Standard","Heat pump"],codes:{"Standard":"","Heat pump":"-HP"}}
+    ],locs:["EXT"],note:null},
+
+  "Renovation":{cats:["R-RNV","C-RNV"],code:"RNV",actions:["RW","I","RE","A"],
+    attrs:[
+      {key:"scope",label:"Scope",options:["Full rewire","Partial","Kitchen","Bathroom","Basement"],codes:{"Full rewire":"FW","Partial":"PART","Kitchen":"KITC","Bathroom":"BATH","Basement":"BMT"}}
+    ],locs:["KITC","BATH","BMT","ROOM","LIV"],note:null},
+
+  "New Build":{cats:["R-NEW","C-NEW"],code:"NEW",actions:["I"],
+    attrs:[
+      {key:"type",label:"Build type",options:["Residential","Commercial","Industrial"],codes:{"Residential":"RES","Commercial":"COMM","Industrial":"IND"}}
+    ],locs:[],note:null},
+
+  "Material Only":{cats:["R-MAT","C-MAT"],code:"MAT",actions:[""],
+    attrs:[],locs:[],note:"No labour — material supply only"},
+
+  "ESA Permit":{cats:["ESA"],code:"ESA",actions:["INS","I"],
+    attrs:[],locs:[],note:null},
+
+  "Service Call":{cats:["R-SVC","C-SVC"],code:"SVC",actions:["T","FX"],
+    attrs:[
+      {key:"timing",label:"Call type",options:["Base","Same day","After hours"],codes:{"Base":"BASE","Same day":"SAME","After hours":"AH"}}
+    ],locs:[],note:null},
+
+  "National Dispatch":{cats:["C-SVC"],code:"NDG",actions:["T"],
+    attrs:[
+      {key:"group",label:"Group",options:["Group 1","Group 2"],codes:{"Group 1":"1","Group 2":"2"}}
+    ],locs:[],note:"Commercial only — National Dispatch Group"},
+
+  "Call Back":{cats:["R-SVC","C-SVC"],code:"CB",actions:[""],
+    attrs:[],locs:[],note:null},
+
+  "General Service":{cats:["R-GEN","C-GEN"],code:"GS",actions:["I","RE","T","FX","RL","RW","A","C","D","M","U","PWR"],
+    attrs:[
+      {key:"device",label:"Device / component",options:["Receptacle","Switch","Breaker","Circuit","Wire","Sensor","Exhaust fan","Baseboard heater","Sub panel","Other"],codes:{"Receptacle":"R","Switch":"S","Breaker":"BKR","Circuit":"CKT","Wire":"WIR","Sensor":"SENS","Exhaust fan":"EXF","Baseboard heater":"BBH","Sub panel":"SB","Other":""}}
+    ],locs:["KITC","BATH","BMT","ROOM","LIV","EXT","GARA","ROOF","BARN"],note:null},
+
+  "Copper Tailing":{cats:["R-GEN","C-GEN"],code:"CU",actions:["RE","I"],
+    attrs:[],locs:["KITC","BATH","BMT","ROOM","LIV","EXT","GARA"],note:null},
+
+  "Custom / Other":{cats:["R-GEN","C-GEN"],code:"CUST",actions:["I","RE","T","FX","A","RW","U"],
+    attrs:[],locs:["KITC","BATH","BMT","ROOM","LIV","EXT","GARA","ROOF","BARN"],note:null},
+
+  "Commercial Fit Up":{cats:["C-FIT"],code:"COMMFIT",actions:["I","RW","A","RE"],
+    attrs:[
+      {key:"scope",label:"Scope",options:["Standard","Additional specs"],codes:{"Standard":"","Additional specs":"-X"}}
+    ],locs:["KITC","BATH","EXT","ROOM"],note:null},
+};
+
+const ACTION_MAP = {
+  "I":"Install","RE":"Replace","T":"Troubleshoot","FX":"Fix","A":"Add","C":"Connect",
+  "D":"Disconnect","M":"Move","PWR":"Power Issue","RL":"Relocate","RW":"Rewire",
+  "U":"Upgrade","INS":"Inspection","":" "
+};
+
+const LOC_MAP = {
+  GARA:"Garage",BMT:"Basement",EXT:"Exterior",ROOM:"Office / Bedroom",
+  KITC:"Kitchen",BATH:"Bathroom",LIV:"Living Room",ROOF:"Roof",BARN:"Barn"
+};
+
+let sel = {l1:'',l2:'',svc:'',action:'',attrs:{},loc:''};
+let history = JSON.parse(localStorage.getItem('jobHistory')||'[]');
+
+function el(id){ return document.getElementById(id); }
+
+function updateNav(){
+  const steps = ['nav-1','nav-2','nav-3','nav-4','nav-5','nav-6','nav-7'];
+  const done = [
+    !!sel.l1, !!sel.l2, !!sel.svc,
+    !!sel.action || (DB[sel.svc]&&DB[sel.svc].actions[0]===''),
+    true, true, !!sel.action
+  ];
+  steps.forEach((id,i)=>{
+    const el2 = el(id);
+    el2.classList.remove('active','done');
+    if(i < done.filter(Boolean).length && done[i]) el2.classList.add('done');
+    const numEl = el2.querySelector('.step-num');
+    if(el2.classList.contains('done')) numEl.textContent = '✓';
+    else numEl.textContent = i+1;
+  });
+  const active = done.indexOf(false);
+  if(active>=0) el(steps[active]).classList.add('active');
+}
+
+function onL1(){
+  sel.l1 = el('svcType').value;
+  sel.l2='';sel.svc='';sel.action='';sel.attrs={};sel.loc='';
+  const cat = el('svcCat');
+  cat.innerHTML='<option value="">— select —</option>';
+  (CATS[sel.l1]||[]).forEach(c=>cat.innerHTML+=`<option value="${c.v}">${c.l}</option>`);
+  cat.disabled = !sel.l1;
+  el('svcName').innerHTML='<option value="">—</option>';
+  el('svcName').disabled = true;
+  el('svcNote').style.display='none';
+  resetWork();
+  updateNav();
+}
+
+function onL2(){
+  sel.l2 = el('svcCat').value;
+  sel.svc='';sel.action='';sel.attrs={};sel.loc='';
+  const nm = el('svcName');
+  nm.innerHTML='<option value="">— select —</option>';
+  Object.entries(DB).forEach(([name,d])=>{
+    if(d.cats.includes(sel.l2)) nm.innerHTML+=`<option value="${name}">${name}</option>`;
+  });
+  nm.disabled = !sel.l2;
+  el('svcNote').style.display='none';
+  resetWork();
+  updateNav();
+}
+
+function onL3(){
+  sel.svc = el('svcName').value;
+  sel.action='';sel.attrs={};sel.loc='';
+  el('svcNote').style.display='none';
+  resetWork();
+  if(!sel.svc){ updateNav(); return; }
+
+  const d = DB[sel.svc];
+  if(!d){ updateNav(); return; }
+
+  if(d.note){
+    el('svcNote').innerHTML=`<div class="note${d.note.startsWith('⚠')?` warn`:''}">${d.note}</div>`;
+    el('svcNote').style.display='block';
+  }
+
+  buildActionPills(d.actions);
+  buildAttrSection(d.attrs);
+  buildLocPills(d.locs);
+  updateNav();
+}
+
+function buildActionPills(actions){
+  const c = el('actionPills');
+  c.innerHTML='';
+  if(actions.length===1&&actions[0]===''){
+    c.innerHTML='<span class="pill na">No action required</span>';
+    return;
+  }
+  actions.forEach(a=>{
+    const p = document.createElement('button');
+    p.className='pill';
+    p.textContent = `${a} — ${ACTION_MAP[a]||a}`;
+    p.onclick = ()=>{
+      c.querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
+      p.classList.add('on');
+      sel.action = a;
+      buildOutput();
+      updateNav();
+    };
+    c.appendChild(p);
+  });
+}
+
+function buildAttrSection(attrs){
+  const sec = el('attrSection');
+  const rows = el('attrRows');
+  rows.innerHTML='';
+  if(!attrs||attrs.length===0){ sec.style.display='none'; return; }
+  sec.style.display='block';
+  attrs.forEach(attr=>{
+    const grp = document.createElement('div');
+    grp.className='attr-group field';
+    grp.innerHTML=`<label>${attr.label}</label><div class="pill-group" id="attr-${attr.key}"></div>`;
+    rows.appendChild(grp);
+    const row = grp.querySelector(`#attr-${attr.key}`);
+    attr.options.forEach(opt=>{
+      const p = document.createElement('button');
+      p.className='pill';
+      p.textContent = opt;
+      p.onclick = ()=>{
+        row.querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
+        p.classList.add('on');
+        sel.attrs[attr.key] = attr.codes[opt]||'';
+        buildOutput();
+      };
+      row.appendChild(p);
+    });
+  });
+}
+
+function buildLocPills(locs){
+  const c = el('locPills');
+  c.innerHTML='';
+  if(!locs||locs.length===0){
+    c.innerHTML='<span class="pill na">No location for this service</span>';
+    return;
+  }
+  locs.forEach(loc=>{
+    const p = document.createElement('button');
+    p.className='pill';
+    p.textContent=`${loc} — ${LOC_MAP[loc]||loc}`;
+    p.onclick=()=>{
+      if(p.classList.contains('on')){
+        p.classList.remove('on'); sel.loc='';
+      } else {
+        c.querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
+        p.classList.add('on'); sel.loc=loc;
+      }
+      buildOutput();
+    };
+    c.appendChild(p);
+  });
+}
+
+function resetWork(){
+  el('actionPills').innerHTML='<span class="pill na">Select a service name first</span>';
+  el('attrSection').style.display='none';
+  el('attrRows').innerHTML='';
+  el('locPills').innerHTML='<span class="pill na">Select a service name first</span>';
+  el('outputCard').innerHTML='<div class="empty-output">Complete sections 1 & 2 to generate your job code</div>';
+}
+
+function buildOutput(){
+  const d = DB[sel.svc];
+  if(!d) return;
+  const noAction = d.actions.length===1&&d.actions[0]==='';
+  if(!noAction&&!sel.action) return;
+
+  const attrStr = Object.values(sel.attrs).join('');
+  const parts = [];
+  if(sel.action) parts.push(sel.action);
+  parts.push(d.code + attrStr);
+  if(sel.loc) parts.push(sel.loc);
+  const code = parts.join('-');
+
+  const actionWord = ACTION_MAP[sel.action]||'';
+  const attrWords = Object.entries(sel.attrs)
+    .map(([k,v])=>v)
+    .filter(Boolean).join(' ');
+  const locWord = sel.loc ? `in ${LOC_MAP[sel.loc]||sel.loc}` : '';
+  const typeWord = sel.l1==='R'?'Residential':'Commercial';
+  const desc = [actionWord, sel.svc, attrWords, locWord].filter(Boolean).join(' ');
+  const fullDesc = `${typeWord} — ${desc}`;
+
+  el('outputCard').innerHTML = `
+    <div class="output-label">Generated job code</div>
+    <div class="output-code">${code}</div>
+    <div class="output-desc">${fullDesc}</div>
+    <div class="output-rates">
+      <div class="rate-field">
+        <label>Base rate ($)</label>
+        <input type="number" id="baseRate" placeholder="185.00" step="0.01" oninput="calcTax()">
+      </div>
+      <div class="rate-field">
+        <label>HST 13%</label>
+        <input id="hstOut" type="text" readonly placeholder="—">
+      </div>
+      <div class="rate-field">
+        <label>Grand total</label>
+        <input id="totOut" type="text" readonly placeholder="—">
+      </div>
+    </div>
+    <div class="output-actions">
+      <button class="btn btn-primary" onclick="copyCode('${code}')">Copy code</button>
+      <button class="btn btn-ghost" onclick="copyFull('${code}','${fullDesc.replace(/'/g,"\\'")}')">Copy full description</button>
+      <button class="btn btn-ghost" onclick="saveEntry('${code}','${fullDesc.replace(/'/g,"\\'")}')">Save to history</button>
+      <button class="btn btn-danger-ghost" onclick="resetAll()">Reset</button>
+    </div>`;
+}
+
+function calcTax(){
+  const r = parseFloat(el('baseRate').value)||0;
+  if(r>0){
+    el('hstOut').value = '$' + (r*0.13).toFixed(2);
+    el('totOut').value = '$' + (r*1.13).toFixed(2);
+  }
+}
+
+function copyCode(code){
+  navigator.clipboard.writeText(code).then(()=>toast('Job code copied!'));
+}
+
+function copyFull(code, desc){
+  navigator.clipboard.writeText(`${code} — ${desc}`).then(()=>toast('Full description copied!'));
+}
+
+function saveEntry(code, desc){
+  const entry = {code, desc, ts: new Date().toLocaleString()};
+  history.unshift(entry);
+  if(history.length>20) history.pop();
+  localStorage.setItem('jobHistory', JSON.stringify(history));
+  renderHistory();
+  toast('Entry saved!');
+}
+
+function renderHistory(){
+  const list = el('historyList');
+  if(history.length===0){
+    list.innerHTML='<div class="empty-history">No entries yet</div>';
+    return;
+  }
+  list.innerHTML = history.map(h=>`
+    <div class="history-item" onclick="navigator.clipboard.writeText('${h.code}').then(()=>toast('Copied!'))">
+      <div class="history-code">${h.code}</div>
+      <div class="history-desc">${h.desc}</div>
+    </div>`).join('');
+}
+
+function resetAll(){
+  sel={l1:'',l2:'',svc:'',action:'',attrs:{},loc:''};
+  ['svcType','svcCat','svcName'].forEach(id=>el(id).value='');
+  el('svcCat').disabled=true;
+  el('svcName').disabled=true;
+  el('svcNote').style.display='none';
+  resetWork();
+  updateNav();
+  ['nav-1','nav-2','nav-3','nav-4','nav-5','nav-6','nav-7'].forEach(id=>{
+    el(id).classList.remove('done');
+    el(id).querySelector('.step-num').textContent = id.replace('nav-','');
+  });
+  el('nav-1').classList.add('active');
+}
+
+function toast(msg){
+  const t = el('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+renderHistory();
+updateNav();
+</script>
+</body>
+</html>
